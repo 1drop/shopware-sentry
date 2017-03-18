@@ -1,0 +1,16 @@
+{
+  "name": "onedrop/shopware-sentry",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hans Höchtl",
+      "email": "hhoechtl@1drop.de"
+    }
+  ],
+  "require": {
+    "sentry/sentry": "^1.6"
+  },
+  "scripts": {
+    "test": "phpunit -c tests/"
+  }
+}
