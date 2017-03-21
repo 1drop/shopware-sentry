@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Event_EventArgs;
 use OdSentry\Components\SentryClient;
 use Shopware\Components\Plugin;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\InstallContext;
 
 class OdSentry extends Plugin
 {
@@ -35,6 +37,16 @@ class OdSentry extends Plugin
             'Enlight_Controller_Front_DispatchLoopShutdown' => 'onDispatchLoopShutdown',
             'Shopware_Console_Add_Command' => 'onStartDispatch'
         ];
+    }
+
+    /**
+     * Theme must be recompiled to include JS
+     *
+     * @param ActivateContext $context
+     */
+    public function activate(ActivateContext $context)
+    {
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
     }
 
     /**
