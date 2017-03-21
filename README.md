@@ -40,3 +40,8 @@ If you enable it and a catchable error occurs, the user will be asked to provide
 ### Shopware plugin store
 
 This plugin will be available shortly in the Shopware plugin store.
+
+## Authors
+
+* Hans Höchtl <hhoechtl[at]1drop.de>
+* Soner Sayakci <s.sayakci[at]gmail.com>
