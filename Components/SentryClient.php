@@ -34,6 +34,9 @@ class SentryClient extends \Raven_Client
      */
     public function captureException($exception, $data = null, $logger = null, $vars = null)
     {
+        $this->tags_context([
+            'php_version' => phpversion()
+        ]);
         if ($this->container) {
             if ($this->container->initialized('session') && !$this->contextSet) {
                 // Frontend user is logged in
