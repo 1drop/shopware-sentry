@@ -2,28 +2,34 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/config.xsd">
     <elements>
         <element type="boolean">
-            <name>logPhp</name>
+            <name>sentryLogPhp</name>
             <label lang="en">Log PHP errors to Sentry</label>
             <label lang="de">PHP Fehler an Sentry übertragen</label>
             <value>false</value>
         </element>
         <element required="false" type="text">
-            <name>privateDsn</name>
+            <name>sentryPrivateDsn</name>
             <label lang="de">Geheimer Datenquellenname (DSN) für PHP</label>
             <label lang="en">Private data source name (DSN) for PHP</label>
             <value></value>
         </element>
         <element type="boolean">
-            <name>logJs</name>
+            <name>sentryLogJs</name>
             <label lang="en">Log JS errors to Sentry</label>
             <label lang="de">JS Fehler an Sentry übertragen</label>
             <value>false</value>
         </element>
-        <element>
-            <name>publicDsn</name>
+        <element required="false" type="text">
+            <name>sentryPublicDsn</name>
             <label lang="en">Public data source name (DSN) for JS</label>
             <label lang="de">Öffentlicher Datenquellenname (DSN) für JS</label>
             <value></value>
+        </element>
+        <element type="boolean">
+            <name>sentryUserfeedback</name>
+            <label lang="en">Enable Sentry Userfeedback</label>
+            <label lang="de">Nutzerfeedback bei Fehler ermitteln</label>
+            <value>false</value>
         </element>
     </elements>
 </config>
