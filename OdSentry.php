@@ -9,15 +9,17 @@
 namespace OdSentry;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Enlight_Event_EventArgs;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RavenHandler;
 use Monolog\Logger;
+use OdSentry\Components\SentryClient;
 use Shopware\Components\Plugin;
 
 class OdSentry extends Plugin
 {
     /**
-     * @var \Raven_Client
+     * @var SentryClient
      */
     protected $ravenClient;
 
@@ -27,13 +29,92 @@ class OdSentry extends Plugin
     public static function getSubscribedEvents()
     {
         return [
+            'Enlight_Controller_Front_StartDispatch' => 'onStartDispatch',
+//            'Enlight_Controller_Action_PreDispatch_Frontend_Error' => 'onPreDispatchError',
+            'Enlight_Controller_Action_PreDispatch_Backend_Error' => 'onPreDispatchBackendError',
             'Theme_Compiler_Collect_Plugin_Javascript' => 'addJsFiles',
             'Enlight_Controller_Action_PostDispatch_Frontend' => 'onPostDispatchFrontend',
-            'Enlight_Controller_Front_StartDispatch' => 'onStartDispatch',
             'Enlight_Controller_Front_DispatchLoopShutdown' => 'onDispatchLoopShutdown',
             'Shopware_Console_Add_Command' => 'onStartDispatch'
         ];
     }
+
+
+    /**
+     * Use the autoloader from the Raven library to load all necessary classes
+     */
+    public function onStartDispatch()
+    {
+        require_once __DIR__ . '/vendor/autoload.php';
+        if (Shopware()->Config()->getByNamespace('OdSentry', 'logPhp')) {
+            $privateDsn = Shopware()->Config()->getByNamespace('OdSentry', 'privateDsn');
+            $this->ravenClient = new SentryClient($privateDsn, [
+                'release' => \Shopware::VERSION,
+                'environment' => $this->container->getParameter('kernel.environment'),
+                'install_default_breadcrumb_handlers' => false
+            ]);
+            $this->ravenClient->setContainer($this->container);
+
+            // Register additional handler for corelogger and pluginlogger
+            $ravenHandler = new RavenHandler($this->ravenClient, Logger::WARNING);
+            $ravenHandler->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
+            /** @var Logger $coreLogger */
+            $coreLogger = $this->container->get('corelogger');
+            $coreLogger->pushHandler($ravenHandler);
+            /** @var Logger $pluginLogger */
+            $pluginLogger = $this->container->get('pluginlogger');
+            $pluginLogger->pushHandler($ravenHandler);
+
+            // Register global error handler
+            $errorHandler = new \Raven_ErrorHandler($this->ravenClient);
+            $errorHandler->registerExceptionHandler();
+            $errorHandler->registerShutdownFunction();
+            // Restore Shopware default error handler
+            restore_error_handler();
+            restore_exception_handler();
+        }
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     *
+     * @return void
+     */
+    public function onPreDispatchBackendError(Enlight_Event_EventArgs $args)
+    {
+        /** @var \Shopware_Controllers_Frontend_Error $subject */
+        $subject = $args->getSubject();
+        if ($this->ravenClient) {
+            $error = $subject->Request()->getParam('error_handler');
+            if ($error && $error->exception) {
+                $this->ravenClient->captureException($error->exception);
+            }
+        }
+    }
+
+//    /**
+//     * @param Enlight_Event_EventArgs $args
+//     *
+//     * @return void
+//     */
+//    public function onPreDispatchError(Enlight_Event_EventArgs $args)
+//    {
+//        /** @var \Shopware_Controllers_Frontend_Error $subject */
+//        $subject = $args->getSubject();
+//        if ($this->ravenClient) {
+//            $error = $subject->Request()->getParam('error_handler');
+//            if ($error && $error->exception) {
+//                $id = $this->ravenClient->captureException($error->exception);
+//                $pluginConfig = $this->getConfig();
+//                if (!$pluginConfig['sentryUserfeedback']) {
+//                    return;
+//                }
+//                $this->container->get('template')->assignGlobal('sentryId', $id);
+//                $this->container->get('template')->assignGlobal('sentryUrlFeedback', $pluginConfig['sentryUrlFeedback']);
+//                $this->container->get('template')->addTemplateDir($this->getPath() . '/Resources/views');
+//            }
+//        }
+//    }
 
     /**
      *
@@ -50,26 +131,6 @@ class OdSentry extends Plugin
 
         return new ArrayCollection($jsFiles);
     }
-
-    /**
-     * Use the autoloader from the Raven library to load all necessary classes
-     */
-    public function onStartDispatch()
-    {
-        require_once __DIR__ . '/vendor/autoload.php';
-        if (Shopware()->Config()->getByNamespace('OdSentry', 'logPhp')) {
-            $privateDsn = Shopware()->Config()->getByNamespace('OdSentry', 'privateDsn');
-            // todo: find out why the default handlers cause the Shopware BE to break
-            $this->ravenClient = new \Raven_Client($privateDsn, ['install_default_breadcrumb_handlers' => false]);
-
-            $ravenHandler = new RavenHandler($this->ravenClient, Logger::WARNING);
-            $ravenHandler->setFormatter(new LineFormatter("%message% %context% %extra%\n"));
-            /** @var Logger $coreLogger */
-            $coreLogger = $this->container->get('corelogger');
-            $coreLogger->pushHandler($ravenHandler);
-        }
-    }
-
 
     /**
      * Like the \Shopware_Plugins_Core_ErrorHandler_Bootstrap we want to catch all errors
