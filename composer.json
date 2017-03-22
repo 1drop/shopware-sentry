@@ -1,6 +1,10 @@
 {
   "name": "onedrop/shopware-sentry",
   "license": "MIT",
+  "type": "shopware-plugin",
+  "extra": {
+    "installer-name": "OdSentry"
+  },
   "authors": [
     {
       "name": "Hans Höchtl",
@@ -12,7 +16,8 @@
     }
   ],
   "require": {
-    "sentry/sentry": "^1.6"
+    "sentry/sentry": "^1.6",
+    "composer/installers": "~1.0"
   },
   "scripts": {
     "test": "phpunit -c tests/"

@@ -42,7 +42,10 @@ class OdSentry extends Plugin
      */
     public function onStartDispatch()
     {
-        require_once __DIR__ . '/vendor/autoload.php';
+        if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+            require_once __DIR__ . '/vendor/autoload.php';
+        }
+
         if (Shopware()->Config()->getByNamespace('OdSentry', 'sentryLogPhp')) {
             $privateDsn = Shopware()->Config()->getByNamespace('OdSentry', 'sentryPrivateDsn');
             $this->sentryClient = new SentryClient($privateDsn, [
