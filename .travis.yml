@@ -1,0 +1,22 @@
+language: php
+cache:
+  directories:
+    - $HOME/.composer/cache
+php:
+  - '7.0'
+install: true
+script:
+  - mkdir -p /tmp/OdSentry
+  - cp -R . /tmp/OdSentry/
+  - composer install -ao -d /tmp/OdSentry
+  - cd /tmp
+  - zip OdSentry.zip OdSentry
+  - cp OdSentry.zip $TRAVIS_BUILD_DIR
+deploy:
+  provider: releases
+  api_key:
+    secure: ErYP5xooeWYKyRdzsE6i4A7kXqiSJhHDsrSG56OjsLFcTAJUwoCD1cp+C2/PnGo47n2TgEhqn6+KC1LKWEtjKAcc7vRAoeFMUoR/NYekGgIcUr2s/J6WW2gCfe/AODKTZlra8glTHgAKots24XkdY9nKSaepT1iuR+IsW+sk4S5uwCPGcCOSZ2R3sztm/Cwb0XJncNwriKklv0CN98dv3W69bpaAQOXkCHc0k0Q+ye7rAexbhVmArljs9i/91S+XACYw9qwAuflpMAGXYo+pLVu1fnMpIp8gbCcAPf2vHWCUvOZW6hcs4MLLMC3eU24rc37H7UpzLRBBZyuN8Z5n/c9kVty16p8SZlT5ZaeYl73jmWO1GzK6+rt5lkM38upLQJsLQGgnpVGOvZGmoBsmT6v1cNJYPSNSayWbAzf1I89LafQhpBUFtTVPFMMGLZ/gvyzlI2iASs8jS/rdz+4nd5J3/e03ak5WXRfEI5/vqrbA63JuSZfZMsLNcjT64lmM1GsLTOI495qmASbY8T0Kq0Tf/js7penwXcmKFEQHsyvx60ZEjPEvByAGGggGpg78/aRqiHUSzrmz6aTuqP3d3ID0M7EfIURAIoOTuYrlt4/gqaOIKhknFoyFArGQSn+bia4uRw3hl8sZcd/RuAmpJkC5DtsHHaTDEmLZ2JjrmDE=
+  file: OdSentry.zip
+  skip_cleanup: true
+  on:
+    tags: true
