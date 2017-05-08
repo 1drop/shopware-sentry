@@ -1,4 +1,5 @@
 language: php
+sudo: false
 cache:
   directories:
     - $HOME/.composer/cache
@@ -10,7 +11,8 @@ script:
   - cp -R . /tmp/OdSentry/
   - composer install -ao -d /tmp/OdSentry
   - cd /tmp
-  - zip OdSentry.zip OdSentry
+  - rm -rf OdSentry/.??*
+  - zip -r OdSentry.zip OdSentry
   - cp OdSentry.zip $TRAVIS_BUILD_DIR
 deploy:
   provider: releases
