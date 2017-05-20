@@ -14,6 +14,7 @@ use OdSentry\Components\SentryClient;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
+use Shopware\Components\Theme\LessDefinition;
 
 class OdSentry extends Plugin
 {
@@ -32,6 +33,7 @@ class OdSentry extends Plugin
             'Enlight_Controller_Action_PreDispatch_Frontend_Error' => 'onPreDispatchError',
             'Enlight_Controller_Action_PreDispatch_Backend_Error' => 'onPreDispatchBackendError',
             'Theme_Compiler_Collect_Plugin_Javascript' => 'addJsFiles',
+            'Theme_Compiler_Collect_Plugin_Less' => 'addLessFiles',
             'Theme_Compiler_Collect_Javascript_Files_FilterResult' => 'sortJs',
             'Enlight_Controller_Action_PostDispatch_Frontend' => 'onPostDispatchFrontend',
             'Enlight_Controller_Front_DispatchLoopShutdown' => 'onDispatchLoopShutdown',
@@ -131,6 +133,20 @@ class OdSentry extends Plugin
             $jsFiles[] = $jsDir . 'vendor/raven.min.js';
         }
         return new ArrayCollection($jsFiles);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function addLessFiles()
+    {
+        $less = new LessDefinition(
+            [],
+            [__DIR__ . '/Resources/views/frontend/_public/src/less/all.less'],
+            __DIR__
+        );
+
+        return new ArrayCollection([$less]);
     }
 
     /**
