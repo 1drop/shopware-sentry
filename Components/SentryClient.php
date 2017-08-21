@@ -53,13 +53,19 @@ class SentryClient extends \Raven_Client
             } else {
                 // Probably backend user
                 try {
-                    $backendUser = Shopware()->Plugins()->Backend()->Auth()->checkAuth()->getIdentity();
-                    $this->user_context([
-                        'id' => $backendUser->id,
-                        'username' => $backendUser->username,
-                        'email' => $backendUser->email
-                    ]);
-                    $this->contextSet = true;
+                    $auth = Shopware()->Plugins()->Backend()->Auth()->checkAuth();
+
+                    if ($auth) {
+                        $backendUser = $auth->getIdentity();
+
+                        $this->user_context([
+                            'id' => $backendUser->id,
+                            'username' => $backendUser->username,
+                            'email' => $backendUser->email
+                        ]);
+                        $this->contextSet = true;
+
+                    }
                 } catch (\Exception $e) {
                 }
             }
