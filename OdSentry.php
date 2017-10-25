@@ -11,10 +11,12 @@ namespace OdSentry;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Event_EventArgs;
 use OdSentry\Components\SentryClient;
+use OdSentry\Components\SentryCompilerPass;
 use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Theme\LessDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class OdSentry extends Plugin
 {
@@ -50,6 +52,16 @@ class OdSentry extends Plugin
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
     }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+        $container->addCompilerPass(new SentryCompilerPass());
+    }
+
 
     /**
      * Use the autoloader from the Raven library to load all necessary classes

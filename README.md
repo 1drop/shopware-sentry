@@ -37,6 +37,18 @@ If you enable it and a catchable error occurs, the user will be asked to provide
 * Install the plugin with the "Plugin Manager"
 * Configure the plugin
 
+### Skip Exceptions
+Since 1.1.1 it is possible to skip exceptions for capture add following snippet to our config.php
+````php
+'sentry' => [
+    'skip_capture' => [
+        CommandNotFoundException::class,
+        Enlight_Controller_Exception::class,
+        MyCustomException::class
+    ]
+]
+````
+
 ### Shopware plugin store
 
 This plugin will be available shortly in the Shopware plugin store.

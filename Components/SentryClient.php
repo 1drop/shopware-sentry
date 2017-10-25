@@ -18,11 +18,17 @@ class SentryClient extends \Raven_Client
     private $container;
 
     /**
+     * @var array
+     */
+    private $skipCapture;
+
+    /**
      * @param ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->skipCapture = $container->getParameter('shopware.sentry')['skip_capture'];
     }
 
     /**
@@ -34,6 +40,10 @@ class SentryClient extends \Raven_Client
      */
     public function captureException($exception, $data = null, $logger = null, $vars = null)
     {
+        if ($this->shouldExceptionCaptureBeSkipped($exception)) {
+            return false;
+        }
+
         $this->tags_context([
             'php_version' => phpversion()
         ]);
@@ -79,6 +89,21 @@ class SentryClient extends \Raven_Client
             }
         }
         return parent::captureException($exception, $data, $logger, $vars);
+    }
+
+    /**
+     * @param \Exception $exception
+     * @return bool
+     */
+    private function shouldExceptionCaptureBeSkipped(\Exception $exception)
+    {
+        foreach ($this->skipCapture as $className) {
+            if ($exception instanceof $className) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
