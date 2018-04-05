@@ -63,7 +63,11 @@ class SentryClient extends \Raven_Client
             } else {
                 // Probably backend user
                 try {
-                    $auth = Shopware()->Plugins()->Backend()->Auth()->checkAuth();
+                    $auth = Shopware()->Container()->get('Auth');
+                    // Workaround due to interface violation of \Zend_Auth_Adapter_Interface
+                    if (method_exists($auth->getBaseAdapter(), 'refresh')) {
+                        $auth = Shopware()->Plugins()->Backend()->Auth()->checkAuth();
+                    }
 
                     if ($auth) {
                         $backendUser = $auth->getIdentity();
