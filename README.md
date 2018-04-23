@@ -32,12 +32,37 @@ If you enable it and a catchable error occurs, the user will be asked to provide
 
 ## Installation
 
-### Git Version
-* Checkout plugin in `/custom/plugins/OdSentry`
+### Load plugin
+
+#### Composer (Shopware 5.4+)
+
+* Install via composer `composer require onedrop/shopware-sentry`
+
+#### Git Version
+
+* Checkout plugin in `git clone https://github.com/1drop/shopware-sentry.git custom/plugins/OdSentry`
+
+#### Shopware plugin store
+
+Plugin can be ordered for free in your plugin manager or in [Shopware plugin store](https://store.shopware.com/ods3018122618489f/sentry.html)
+
+### Install plugin
+
+#### CLI
+
+* Install plugin `php ./bin/console sw:plugin:install OdSentry`
+* Get plugin config  `php ./bin/console sw:plugin:config:list OdSentry` (based on `custom/plugins/OdSentry/Resources/config.xml`)
+* Set plugin config e.g. `php ./bin/console sw:plugin:config:set OdSentry sentryLogPhp true`
+* Activate plugin `php ./bin/console sw:plugin:activate OdSentry`
+* (optional) Clear cache `php ./bin/console sw:cache:clear`
+
+#### Web
+
 * Install the plugin with the "Plugin Manager"
 * Configure the plugin
 
 ### Skip Exceptions
+
 Since 1.1.1 it is possible to skip exceptions for capture add following snippet to our config.php
 ````php
 'sentry' => [
@@ -48,10 +73,6 @@ Since 1.1.1 it is possible to skip exceptions for capture add following snippet 
     ]
 ]
 ````
-
-### Shopware plugin store
-
-This plugin will be available shortly in the Shopware plugin store.
 
 ## Authors
 
