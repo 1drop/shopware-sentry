@@ -5,9 +5,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace OdSentry\Components;
-
 
 use Enlight_Controller_Exception;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
@@ -26,8 +24,8 @@ class SentryCompilerPass implements CompilerPassInterface
     private $defaultConfiguration = [
         'skip_capture' => [
             CommandNotFoundException::class,
-            Enlight_Controller_Exception::class
-        ]
+            Enlight_Controller_Exception::class,
+        ],
     ];
 
     /**

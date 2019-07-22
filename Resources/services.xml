@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Subscriber -->
+        <service class="OdSentry\Subscriber\TemplateRegistration" id="od_sentry.subscriber.template_registration">
+            <argument type="service" id="template"/>
+            <argument>%od_sentry.plugin_dir%</argument>
+            <tag name="shopware.event_subscriber"/>
+        </service>
+        <service class="OdSentry\Subscriber\ErrorHandler" id="od_sentry.subscriber.error_handler">
+            <tag name="shopware.event_subscriber"/>
+            <argument type="service" id="service_container"/>
+        </service>
+    </services>
+</container>

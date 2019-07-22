@@ -7,12 +7,6 @@
             <label lang="de">PHP Fehler an Sentry übertragen</label>
             <value>false</value>
         </element>
-        <element required="false" type="text">
-            <name>sentryPrivateDsn</name>
-            <label lang="de">Geheimer Datenquellenname (DSN) für PHP</label>
-            <label lang="en">Private data source name (DSN) for PHP</label>
-            <value></value>
-        </element>
         <element type="boolean">
             <name>sentryLogJs</name>
             <label lang="en">Log JS errors to Sentry</label>

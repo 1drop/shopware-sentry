@@ -1,4 +1,4 @@
-# OdSentry plugin for Shopware 5.2
+# OdSentry plugin for Shopware 5.5
 
 ## What is Sentry
 [Sentry](https://sentry.io) is a modern error tracking platform. You can log and trace errors in Sentry and collect directly feedback from user.
@@ -32,15 +32,18 @@ If you enable it and a catchable error occurs, the user will be asked to provide
 
 ## Installation
 
+**Requires PHP >= 7.1 !!**
+
 ### Load plugin
 
-#### Composer (Shopware 5.4+)
+#### Composer (Shopware 5.5+)
 
 * Install via composer `composer require onedrop/shopware-sentry`
 
 #### Git Version
 
 * Checkout plugin in `git clone https://github.com/1drop/shopware-sentry.git custom/plugins/OdSentry`
+* Install dependencies `composer install`
 
 #### Shopware plugin store
 
