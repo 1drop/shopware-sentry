@@ -75,7 +75,7 @@ class OdSentry extends Plugin
         if (Shopware()->Config()->getByNamespace('OdSentry', 'sentryLogPhp')) {
             $privateDsn = Shopware()->Config()->getByNamespace('OdSentry', 'sentryPrivateDsn');
             $this->sentryClient = new SentryClient($privateDsn, [
-                'release' => \Shopware::VERSION,
+                'release' => $this->container->getParameter('shopware.release.version'),
                 'environment' => $this->container->getParameter('kernel.environment'),
                 'install_default_breadcrumb_handlers' => false
             ]);
