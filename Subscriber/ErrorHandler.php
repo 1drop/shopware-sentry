@@ -11,7 +11,7 @@ namespace OdSentry\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use OdSentry\OdSentry;
-use Sentry\State\Hub;
+use Sentry\SentrySdk;
 use Sentry\State\Scope;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -71,7 +71,7 @@ class ErrorHandler implements SubscriberInterface
     {
         $publicDsn = $this->container->get('config')->getByNamespace(OdSentry::PLUGIN_NAME, 'sentryPublicDsn');
         initSentry(['dsn' => $publicDsn]);
-        $options = Hub::getCurrent()->getClient()->getOptions();
+        $options = SentrySdk::getCurrentHub()->getClient()->getOptions();
         $options->setEnvironment($this->container->getParameter('kernel.environment'));
         if ($this->container->has('shopware.release')) {
             $options->setRelease(
