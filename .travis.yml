@@ -4,7 +4,7 @@ cache:
   directories:
     - $HOME/.composer/cache
 php:
-  - '7.0'
+  - '7.2'
 install: true
 script:
   - mkdir -p /tmp/OdSentry
