@@ -1,4 +1,4 @@
-# OdSentry plugin for Shopware 5.5
+# OdSentry plugin for Shopware 5.6
 
 ## What is Sentry
 [Sentry](https://sentry.io) is a modern error tracking platform. You can log and trace errors in Sentry and collect directly feedback from user.
