@@ -136,6 +136,11 @@ class ErrorHandler implements SubscriberInterface
                     $scope->setExtra('userData', $userData);
                 }
             }
+
+            if ($serviceContainer->initialized('shop')) {
+                $scope->setTag('shop', $serviceContainer->get('shop')->getName());
+            }
+
             // Check for backend request
             try {
                 $auth = $serviceContainer->get('Auth');
