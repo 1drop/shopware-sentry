@@ -70,8 +70,9 @@ Since 1.1.1 it is possible to skip exceptions for capture add following snippet 
 ````php
 'sentry' => [
     'skip_capture' => [
-        CommandNotFoundException::class,
+        Symfony\Component\Console\Exception\CommandNotFoundException::class,
         Enlight_Controller_Exception::class,
+//        Shopware\Components\Api\Exception\NotFoundException:class,
         MyCustomException::class
     ]
 ]
