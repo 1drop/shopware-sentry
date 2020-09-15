@@ -10,7 +10,7 @@
     <copyright>(c) by Onedrop GmbH &amp; Co. KG</copyright>
     <license>MIT</license>
     <link>https://1drop.de</link>
-    <compatibility minVersion="5.5.0" />
+    <compatibility minVersion="5.6.0" />
     <changelog version="2.0.3">
         <changes lang="de">Neue Sentry SDK version</changes>
         <changes lang="en">New version of Sentry SDK</changes>
