@@ -2,7 +2,7 @@
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.5/engine/Shopware/Components/Plugin/schema/plugin.xsd">
     <label lang="en">Sentry</label>
     <label lang="de">Sentry</label>
-    <version>2.0.4</version>
+    <version>2.0.5</version>
     <description lang="de">Sentry Fehlertracking für Shopware</description>
     <description lang="en">Sentry error tracking for Shopware</description>
     <author>Onedrop GmbH &amp; Co. KG</author>
@@ -10,6 +10,10 @@
     <license>MIT</license>
     <link>https://1drop.de</link>
     <compatibility minVersion="5.6.0" />
+    <changelog version="2.0.5">
+        <changes lang="de">Fix fuer Sentry SDK composer bundle lokal</changes>
+        <changes lang="en">Fix for sentry SDK being bundled in the plugin</changes>
+    </changelog>
     <changelog version="2.0.4">
         <changes lang="de">Fix fuer Sentry SDK composer bundle</changes>
         <changes lang="en">Fix for sentry SDK being bundled in the plugin</changes>
