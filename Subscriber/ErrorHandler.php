@@ -48,18 +48,32 @@ class ErrorHandler implements SubscriberInterface
         if (class_exists('\PackageVersions\Versions') && !isset(Versions::VERSIONS['sentry/sdk']) && is_dir($this->pluginDirectory . '/vendor')) {
             $composerLock = json_decode(file_get_contents($this->pluginDirectory . '/composer.lock'), true);
             $sentryPackage = current(array_filter($composerLock['packages'], function(array $package) {
-                return $package['name'] === 'sentry/sdk';
+                return $package['name'] === 'sentry/sentry';
             }));
             $sentryVersion = $sentryPackage['version'];
-            $clientBuilder = file_get_contents($this->pluginDirectory . '/vendor/sentry/sentry/src/ClientBuilder.php');
-            $clientBuilder = str_replace('PrettyVersions::getVersion(\'sentry/sentry\')->getPrettyVersion()', "'" . $sentryVersion . "'", $clientBuilder);
-            file_put_contents($this->pluginDirectory . '/vendor/sentry/sentry/src/ClientBuilder.php', $clientBuilder, LOCK_EX);
+            $this->replaceFileContent(
+                $this->pluginDirectory . '/vendor/sentry/sentry/src/ClientBuilder.php',
+                'PrettyVersions::getVersion(\'sentry/sentry\')->getPrettyVersion()',
+                "'" . $sentryVersion . "'"
+            );
+            $this->replaceFileContent(
+                $this->pluginDirectory . '/vendor/sentry/sentry/src/Event.php',
+                'PrettyVersions::getVersion(\'sentry/sentry\')->getPrettyVersion()',
+                "'" . $sentryVersion . "'"
+            );
         }
         // Use composer autoloader if dependencies are bundles within the plugin (non-composer mode)
         if (file_exists($this->pluginDirectory . '/vendor/autoload.php')) {
             require_once $this->pluginDirectory . '/vendor/autoload.php';
         }
         $this->container = $container;
+    }
+
+    private function replaceFileContent(string $file, string $search, string $replace)
+    {
+        $fileContent = file_get_contents($file);
+        $fileContent = str_replace($search, $replace, $fileContent);
+        file_put_contents($file, $fileContent, LOCK_EX);
     }
 
     /**
