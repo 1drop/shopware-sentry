@@ -14,12 +14,12 @@
     }
   ],
   "require": {
-    "composer/installers": "~1.6",
-    "sentry/sdk": "^2.0"
+    "composer/installers": "^2.0",
+    "sentry/sdk": "^3.0"
   },
   "config": {
     "platform": {
-      "php": "7.2.0"
+      "php": "7.4.0"
     }
   },
   "extra": {

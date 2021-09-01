@@ -45,7 +45,7 @@ class ErrorHandler implements SubscriberInterface
     {
         $this->pluginDirectory = $container->getParameter('od_sentry.plugin_dir');
         // Hot fix the ClientBuilder of the sentry sdk if the SDK is not installed via composer but bundled in the plugin
-        if (class_exists('\PackageVersions\Versions') && !isset(Versions::VERSIONS['sentry/sdk']) && is_dir($this->pluginDirectory . '/vendor')) {
+        if (class_exists('\PackageVersions\Versions') && !isset(Versions::VERSIONS['sentry/sdk']) && is_dir($this->pluginDirectory . '/vendor') && !file_exists($this->pluginDirectory . '/.is_patched')) {
             $composerLock = json_decode(file_get_contents($this->pluginDirectory . '/composer.lock'), true);
             $sentryPackage = current(array_filter($composerLock['packages'], function(array $package) {
                 return $package['name'] === 'sentry/sentry';
@@ -57,10 +57,16 @@ class ErrorHandler implements SubscriberInterface
                 "'" . $sentryVersion . "'"
             );
             $this->replaceFileContent(
+                $this->pluginDirectory . '/vendor/sentry/sentry/src/Client.php',
+                'PrettyVersions::getVersion(\'sentry/sentry\')->getPrettyVersion()',
+                "'" . $sentryVersion . "'"
+            );
+            $this->replaceFileContent(
                 $this->pluginDirectory . '/vendor/sentry/sentry/src/Event.php',
                 'PrettyVersions::getVersion(\'sentry/sentry\')->getPrettyVersion()',
                 "'" . $sentryVersion . "'"
             );
+            touch($this->pluginDirectory . '/.is_patched');
         }
         // Use composer autoloader if dependencies are bundles within the plugin (non-composer mode)
         if (file_exists($this->pluginDirectory . '/vendor/autoload.php')) {
