@@ -1,31 +1,27 @@
 {
-  "name": "onedrop/shopware-sentry",
-  "type": "shopware-plugin",
-  "description": "Sentry integration for Shopware",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Hans Höchtl",
-      "email": "hhoechtl@1drop.de"
+    "name": "onedrop/shopware-sentry",
+    "type": "shopware-plugin",
+    "description": "Sentry integration for Shopware",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hans Höchtl",
+            "email": "hhoechtl@1drop.de"
+        },
+        {
+            "name": "Soner Sayakci",
+            "email": "s.sayakci@gmail.com"
+        }
+    ],
+    "require": {
+        "sentry/sentry": "^3.10",
+        "symfony/http-client": "^4.4|^5.0",
+        "psr/log": "^1"
     },
-    {
-      "name": "Soner Sayakci",
-      "email": "s.sayakci@gmail.com"
+    "extra": {
+        "installer-name": "OdSentry"
+    },
+    "scripts": {
+        "test": "phpunit -c tests/"
     }
-  ],
-  "require": {
-    "composer/installers": "^2.0",
-    "sentry/sdk": "^3.0"
-  },
-  "config": {
-    "platform": {
-      "php": "7.4.0"
-    }
-  },
-  "extra": {
-    "installer-name": "OdSentry"
-  },
-  "scripts": {
-    "test": "phpunit -c tests/"
-  }
 }
